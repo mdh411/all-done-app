@@ -3,12 +3,13 @@ name = "all-done-backend"
 version = "0.1.0"
 description = "Backend for the All Done App"
 authors = ["Mohammed Hussain <mohammed.hussain@ada.ac.uk>"]
-dependencies = [
-    "flask",
-    "pytest",
-    "coverage",
-    "flake8"
-]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+flask = "^3.0"
+pytest = "^8.2.0"
+coverage = "^7.5.0"
+flake8 = "^7.1.0"
 
 [tool.poetry.dev-dependencies]
 
