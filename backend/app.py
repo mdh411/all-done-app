@@ -13,6 +13,14 @@ def validate_task(task):
         return False
     return True
 
+def validate_task_update(task):
+    if 'name' in task and (not isinstance(task['name'], str) or len(task['name'].strip()) == 0):
+        return False
+    if 'checked' in task and not isinstance(task['checked'], bool):
+        return False
+    return True
+
+
 @app.errorhandler(400)
 def bad_request(error):
     response = jsonify({"message": error.description})
@@ -49,13 +57,14 @@ def edit_tasks(task_id):
     if not task:
         abort(404, "Task not found")
     
-    if not request.json or ('name' in request.json and not isinstance(request.json['name'], str)) or ('name' in request.json and len(request.json['name'].strip()) == 0):
-        abort(400, "Invalid task data. 'name' field must be a non-empty string if provided.")
+    if not request.json or not validate_task_update(request.json):
+        abort(400, "Invalid task data. 'name' field must be a non-empty string if provided and 'checked' field must be a boolean if provided.")
     
     task["name"] = request.json.get("name", task["name"])
     task["checked"] = request.json.get("checked", task["checked"])
 
     return jsonify({"message": "Task updated successfully", "task": task}), 200
+
 
 @app.route("/tasks/<int:task_id>", methods=["DELETE"])
 def delete_task(task_id):

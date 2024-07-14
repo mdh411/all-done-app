@@ -37,7 +37,7 @@ jobs:
           run: poetry run flake8
           continue-on-error: true
 
-        # - name: Run tests
-        #   run: |
-        #         poetry run coverage run -m pytest
-        #         poetry run coverage report
+        - name: Run tests
+          run: |
+                poetry run coverage run -m pytest
+                poetry run coverage report

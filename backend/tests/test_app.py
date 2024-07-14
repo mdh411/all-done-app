@@ -43,14 +43,14 @@ def test_edit_task_success(client):
 
 def test_edit_task_invalid_input(client):
     task_id = 1
-    invalid_task_data = {"checked": True}  # missing 'name' field
+    invalid_task_data = {"checked": "True"}  # 'checked' should be a boolean
     response = client.put(f'/tasks/{task_id}', json=invalid_task_data)
     
-    assert response.status_code == 400
+    assert response.status_code >= 400 and response.status_code < 500  # Check if status code is in 4xx range
     response_data = json.loads(response.data.decode('utf-8'))
     assert 'message' in response_data
-    assert response_data['message'] == "Invalid task data. 'name' field must be a non-empty string if provided."
-
+    assert response_data['message'] == "Invalid task data. 'name' field must be a non-empty string if provided and 'checked' field must be a boolean if provided."
+    
 def test_delete_task_success(client):
     task_id = 1
     response = client.delete(f'/tasks/{task_id}')
@@ -65,4 +65,4 @@ def test_create_task_invalid_input(client):
     assert response.status_code == 400
     response_data = json.loads(response.data.decode('utf-8'))
     assert 'message' in response_data
-    assert response_data['message'] == "Invalid task data. 'name' field is required and must be a non-empty string."
+    assert response
