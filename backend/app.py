@@ -20,7 +20,6 @@ def validate_task_update(task):
         return False
     return True
 
-
 @app.errorhandler(400)
 def bad_request(error):
     response = jsonify({"message": error.description})
@@ -32,6 +31,10 @@ def not_found(error):
     response = jsonify({"message": error.description})
     response.status_code = 404
     return response
+
+@app.errorhandler(Exception)
+def handle_exception(e):
+    return jsonify({"message": "An unexpected error occurred"}), 500
 
 @app.route("/")
 @app.route("/home")
