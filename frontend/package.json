@@ -6,6 +6,7 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
@@ -60,14 +61,15 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/preset-env": "^7.24.8",
+    "@babel/preset-react": "^7.24.7",
     "@eslint/compat": "^1.1.1",
     "@eslint/js": "^8.57.0",
     "eslint": "^8.57.0",
-    "eslint-plugin-react": "^7.34.4",
     "eslint-plugin-jest": "^27.2.1",
+    "eslint-plugin-react": "^7.34.4",
     "globals": "^15.8.0",
-    "jest-transform-stub": "^2.0.0",
-    "@babel/preset-env": "^7.24.8",
-    "@babel/preset-react": "^7.24.7"
+    "jest-transform-stub": "^2.0.0"
   }
 }
