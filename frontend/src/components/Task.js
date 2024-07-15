@@ -1,12 +1,14 @@
 import React from 'react';
 
-function Task({ task }) {
-  return (
-    <div>
-      <input type="checkbox" checked={task.checked} />
-      <label>{task.name}</label>
-    </div>
-  );
-}
+const Task = ({ task, onToggle }) => (
+  <div>
+    <input
+      type="checkbox"
+      checked={task.checked}
+      onChange={() => onToggle(task.id)}
+    />
+    {task.name}
+  </div>
+);
 
 export default Task;

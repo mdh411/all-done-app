@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 import App from './App';
 
 test('renders the create task form', () => {
@@ -13,13 +14,10 @@ test('allows users to add a task', async () => {
   const inputElement = getByPlaceholderText(/New task/i);
   const buttonElement = getByRole('button', { name: /Add Task/i });
 
-  // simulate user click
   fireEvent.change(inputElement, { target: { value: 'New Task' } });
   fireEvent.click(buttonElement);
 
-  // wait for the page to update
-  await waitFor(() => getByText('New Task'));
-
-  // check task was added
-  expect(getByText('New Task')).toBeInTheDocument();
+  await waitFor(() => {
+    expect(getByText('New Task')).toBeInTheDocument();
+  });
 });
