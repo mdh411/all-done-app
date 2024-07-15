@@ -11,4 +11,13 @@ const Task = ({ task, onToggle }) => (
   </div>
 );
 
+Task.propTypes = {
+  task: PropTypes.shape({
+    checked: PropTypes.bool,
+    id: PropTypes.number,
+    name: PropTypes.string,
+  }).isRequired,
+  onToggle: PropTypes.func.isRequired,
+};
+
 export default Task;

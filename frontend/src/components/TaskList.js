@@ -11,4 +11,14 @@ function TaskList({ tasks }) {
   );
 }
 
+TaskList.propTypes = {
+  tasks: PropTypes.arrayOf(
+    PropTypes.shape({
+      checked: PropTypes.bool,
+      id: PropTypes.number,
+      name: PropTypes.string,
+    })
+  ).isRequired,
+};
+
 export default TaskList;

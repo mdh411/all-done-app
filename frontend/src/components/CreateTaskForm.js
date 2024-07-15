@@ -23,4 +23,8 @@ function CreateTaskForm({ onCreate }) {
   );
 }
 
+CreateTaskForm.propTypes = {
+  onCreate: PropTypes.func.isRequired,
+};
+
 export default CreateTaskForm;
