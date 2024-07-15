@@ -1,11 +1,9 @@
 import React from 'react';
 
-function Task({ task }) {
+function Task() {
     return (
         <div>
-            <h3>{task.title}</h3>
-            <p>{task.description}</p>
-            <p>Status: {task.status ? 'Done' : 'Not Done'}</p>
+            <h2>My Task</h2>
         </div>
     );
 }
