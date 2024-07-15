@@ -1,13 +1,12 @@
 import React from 'react';
 
 function Task({ task }) {
-    return (
-        <div>
-            <h3>{task.title}</h3>
-            <p>{task.description}</p>
-            <p>Status: {task.status ? 'Done' : 'Not Done'}</p>
-        </div>
-    );
+  return (
+    <div>
+      <input type="checkbox" checked={task.checked} />
+      <label>{task.name}</label>
+    </div>
+  );
 }
 
 export default Task;
