@@ -1,5 +1,5 @@
 import random
-from flask import Flask, jsonify, redirect, request, render_template, url_for
+from flask import Flask, jsonify, request, render_template, abort
 
 app = Flask(__name__)
 
@@ -8,6 +8,33 @@ tasks = [
     {"id": 2, "name": "Pray Maghrib", "checked": True},
 ]
 
+def validate_task(task):
+    if 'name' not in task or not isinstance(task['name'], str) or len(task['name'].strip()) == 0:
+        return False
+    return True
+
+def validate_task_update(task):
+    if 'name' in task and (not isinstance(task['name'], str) or len(task['name'].strip()) == 0):
+        return False
+    if 'checked' in task and not isinstance(task['checked'], bool):
+        return False
+    return True
+
+@app.errorhandler(400)
+def bad_request(error):
+    response = jsonify({"message": error.description})
+    response.status_code = 400
+    return response
+
+@app.errorhandler(404)
+def not_found(error):
+    response = jsonify({"message": error.description})
+    response.status_code = 404
+    return response
+
+@app.errorhandler(Exception)
+def handle_exception(e):
+    return jsonify({"message": "An unexpected error occurred"}), 500
 
 @app.route("/")
 @app.route("/home")
@@ -20,6 +47,9 @@ def get_tasks():
 
 @app.route("/tasks", methods=["POST"])
 def create_task():
+    if not request.json or not validate_task(request.json):
+        abort(400, "Invalid task data. 'name' field is required and must be a non-empty string.")
+    
     new_task = {"id": len(tasks) + 1, "name": request.json["name"], "checked": False}
     tasks.append(new_task)
     return jsonify({"message": "Task created successfully", "task": new_task}), 201
@@ -28,8 +58,11 @@ def create_task():
 def edit_tasks(task_id):
     task = next((task for task in tasks if task["id"] == task_id), None)
     if not task:
-        return jsonify({"message": "Task not found"}), 404
-
+        abort(404, "Task not found")
+    
+    if not request.json or not validate_task_update(request.json):
+        abort(400, "Invalid task data. 'name' field must be a non-empty string if provided and 'checked' field must be a boolean if provided.")
+    
     task["name"] = request.json.get("name", task["name"])
     task["checked"] = request.json.get("checked", task["checked"])
 
@@ -41,7 +74,6 @@ def delete_task(task_id):
     global tasks
     tasks = [task for task in tasks if task["id"] != task_id]
     return jsonify({"message": "Task deleted successfully"}), 200
-
 
 if __name__ == "__main__":
     app.run(debug=True)
