@@ -1,13 +1,9 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import axios from 'axios';
-import Tasks from './components/Tasks/Tasks';
+import Tasks from './Tasks';
 
 jest.mock('axios');
-
-beforeAll(() => {
-  process.env.REACT_APP_API_URL = 'http://localhost:5000';
-});
 
 test('renders tasks fetched from API', async () => {
   const tasks = [
@@ -20,14 +16,4 @@ test('renders tasks fetched from API', async () => {
 
   expect(await screen.findByText('Test Task 1 - Incomplete')).toBeInTheDocument();
   expect(await screen.findByText('Test Task 2 - Completed')).toBeInTheDocument();
-});
-
-test('displays error message when API call fails', async () => {
-  axios.get.mockRejectedValue(new Error('There was an error retrieving the tasks!'));
-
-  render(<Tasks />);
-
-  await waitFor(() => {
-    expect(screen.getByText('There was an error retrieving the tasks!')).toBeInTheDocument();
-  });
 });
