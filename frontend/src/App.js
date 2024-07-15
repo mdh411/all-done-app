@@ -1,24 +1,13 @@
-// src/App.js
-import React, { useState } from 'react';
-import TaskList from './components/TaskList';
-import CreateTaskForm from './components/CreateTaskForm';
+import React from 'react';
+import './App.css';
+import Tasks from './components/Tasks/Tasks';
 
 function App() {
-    const [tasks, setTasks] = useState([]);
-
-    const handleCreate = (name) => {
-        // Hadd code from backend later
-        // for now add to local state
-        const newTask = { id: Date.now(), name, checked: false };
-        setTasks([...tasks, newTask]);
-      };
-
-      return (
-        <div>
-          <CreateTaskForm onCreate={handleCreate} />
-          <TaskList tasks={tasks} />
-        </div>
-      );
+  return (
+    <div className="App">
+      <Tasks />
+    </div>
+  );
 }
 
 export default App;

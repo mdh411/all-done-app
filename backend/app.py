@@ -1,7 +1,9 @@
 import random
 from flask import Flask, jsonify, request, render_template, abort
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, origins="http://localhost:3000")
 
 tasks = [
     {"id": 1, "name": "Pray Asr", "checked": False},

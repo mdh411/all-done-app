@@ -1,12 +1,13 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import axios from 'axios';
-import Tasks from './components/Tasks/Tasks';
+import Tasks from './Tasks';
 
 jest.mock('axios');
 
+// Set the environment variable
 beforeAll(() => {
-  process.env.REACT_APP_API_URL = 'http://localhost:5000';
+  process.env.REACT_APP_API_URL= 'http://localhost:5000';
 });
 
 test('renders tasks fetched from API', async () => {
