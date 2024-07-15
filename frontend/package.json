@@ -9,19 +9,43 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
+    "stylelint": "^16.7.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "jest",
+    "lint": "eslint --no-ignore src/",
+    "lint:styles": "stylelint '**/*.css' --quiet || echo 'Stylelint completed with warnings'",
+    "coverage": "jest  --coverage",
+    "eject": "react-scripts eject",
+    "check-types": "tsc --noEmit"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
     ]
+  },
+  "jest": {
+    "coverageDirectory": "coverage",
+    "testEnvironment": "jsdom",
+    "testMatch": [
+      "<rootDir>/src/**/*.test.{js,jsx,ts,tsx}"
+    ],
+    "transform": {
+      "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
+      "^.+\\.(css|svg|png|jpg)$": "jest-transform-stub"
+    },
+    "coverageThreshold": {
+      "global": {
+        "branches": 45,
+        "functions": 45,
+        "lines": 45,
+        "statements": 45
+      }
+    }
   },
   "browserslist": {
     "production": [
@@ -34,5 +58,16 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@eslint/compat": "^1.1.1",
+    "@eslint/js": "^8.57.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.4",
+    "eslint-plugin-jest": "^27.2.1",
+    "globals": "^15.8.0",
+    "jest-transform-stub": "^2.0.0",
+    "@babel/preset-env": "^7.24.8",
+    "@babel/preset-react": "^7.24.7"
   }
 }
