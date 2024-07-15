@@ -18,9 +18,11 @@
     "test": "jest",
     "eject": "react-scripts eject",
     "lint:styles": "stylelint '**/*.css' --quiet || echo 'Stylelint completed with warnings'",
-    "lint": "eslint --no-ignore src/"
+    "lint": "eslint --no-ignore src/",
+    "coverage": "jest --coverage"
   },
   "jest": {
+    "coverageDirectory": "coverage",
     "setupFilesAfterEnv": [
       "<rootDir>/src/setupTests.js"
     ],
