@@ -2,15 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Checkbox from '@mui/material/Checkbox';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit'; // Import Edit Icon
 import './TaskItem.css';
 
-const TaskItem = ({ task, onDeleteTask, onToggleTask }) => {
+const TaskItem = ({ task, onDeleteTask, onToggleTask, onEditTask }) => {
   const handleToggle = () => {
     onToggleTask(task.id);
   };
 
   const handleDelete = () => {
     onDeleteTask(task.id);
+  };
+
+  const handleEdit = () => {
+    onEditTask(task.id); // Call the edit handler
   };
 
   return (
@@ -21,6 +26,11 @@ const TaskItem = ({ task, onDeleteTask, onToggleTask }) => {
         inputProps={{ 'aria-label': 'complete task checkbox', 'data-testid': `complete-checkbox-${task.id}` }}
       />
       <span className="task-name">{task.name}</span>
+      <EditIcon
+        className="edit-button"
+        onClick={handleEdit}
+        data-testid={`edit-button-${task.id}`}
+      />
       <DeleteIcon
         className="delete-button"
         onClick={handleDelete}
@@ -38,6 +48,7 @@ TaskItem.propTypes = {
   }).isRequired,
   onDeleteTask: PropTypes.func.isRequired,
   onToggleTask: PropTypes.func.isRequired,
+  onEditTask: PropTypes.func.isRequired, // Add propTypes for the edit handler
 };
 
 export default TaskItem;

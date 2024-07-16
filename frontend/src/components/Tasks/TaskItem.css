@@ -7,6 +7,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border: 1px solid #ddd; /* Added border for better separation */
   transition: background-color 0.3s ease; /* Smooth transition for background color change */
 }
 
@@ -26,7 +27,32 @@
   background-color: #e0e0e0; /* Faded background for completed tasks */
 }
 
-.delete-button {
+.button-container {
+  display: flex;
+  gap: 10px; /* Added space between buttons */
+}
+
+.edit-button, .delete-button {
   cursor: pointer;
+  border: none;
+  background: none;
+  padding: 5px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.edit-button {
+  padding-right: 10px;
+}
+
+.edit-button:hover {
+  background-color: #d0e0ff;
+}
+
+.delete-button {
   color: red;
+}
+
+.delete-button:hover {
+  background-color: #ffd0d0;
 }

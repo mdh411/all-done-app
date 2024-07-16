@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import AddTaskModal from './AddTaskModal';
+import EditTaskModal from './EditTaskModal'; // Import the EditTaskModal component
 import TaskItem from './TaskItem';
 import './Tasks.css';
 import allDoneLogo from '../../assets/images/all_done_logo_2.png';
 
 const Tasks = () => {
   const [tasks, setTasks] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // State for Edit Modal
   const [error, setError] = useState('');
+  const [taskToEdit, setTaskToEdit] = useState(null); // State for the task to be edited
   const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
   useEffect(() => {
@@ -35,6 +38,19 @@ const Tasks = () => {
       });
   };
 
+  const handleEditTask = (taskId, taskName) => {
+    const updatedTasks = tasks.map(task =>
+      task.id === taskId ? { ...task, name: taskName } : task
+    );
+    setTasks(updatedTasks);
+
+    axios.put(`${apiUrl}/tasks/${taskId}`, { name: taskName })
+      .catch(error => {
+        console.error("There was an error updating the task!", error);
+        setTasks(tasks); // Revert back to original tasks on error
+      });
+  };
+
   const handleToggleTask = (taskId) => {
     const updatedTasks = tasks.map(task =>
       task.id === taskId ? { ...task, checked: !task.checked } : task
@@ -58,10 +74,16 @@ const Tasks = () => {
       });
   };
 
+  const handleEditTaskOpen = (taskId) => {
+    const task = tasks.find(task => task.id === taskId);
+    setTaskToEdit(task);
+    setIsEditModalOpen(true);
+  };
+
   return (
     <div>
       <img src={allDoneLogo} alt="Logo" className="logo" />
-      <button className="add-task-button" onClick={() => setIsModalOpen(true)} data-testid="open-add-task-modal-button">
+      <button className="add-task-button" onClick={() => setIsAddModalOpen(true)} data-testid="open-add-task-modal-button">
         + ADD TASK
       </button>
       <div className="tasks-container">
@@ -73,15 +95,24 @@ const Tasks = () => {
               task={task}
               onDeleteTask={handleDeleteTask}
               onToggleTask={handleToggleTask}
+              onEditTask={handleEditTaskOpen} // Pass the edit handler to TaskItem
             />
           ))}
         </div>
       </div>
       <AddTaskModal
-        isOpen={isModalOpen}
-        onRequestClose={() => setIsModalOpen(false)}
+        isOpen={isAddModalOpen}
+        onRequestClose={() => setIsAddModalOpen(false)}
         onAddTask={handleAddTask}
       />
+      {taskToEdit && (
+        <EditTaskModal
+          isOpen={isEditModalOpen}
+          onRequestClose={() => setIsEditModalOpen(false)}
+          onEditTask={handleEditTask}
+          task={taskToEdit}
+        />
+      )}
     </div>
   );
 };
