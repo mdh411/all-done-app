@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Checkbox from '@mui/material/Checkbox';
 import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit'; // Import Edit Icon
+import EditIcon from '@mui/icons-material/Edit';
 import './TaskItem.css';
 
 const TaskItem = ({ task, onDeleteTask, onToggleTask, onEditTask }) => {
@@ -15,7 +15,7 @@ const TaskItem = ({ task, onDeleteTask, onToggleTask, onEditTask }) => {
   };
 
   const handleEdit = () => {
-    onEditTask(task.id); // Call the edit handler
+    onEditTask(task.id);
   };
 
   return (
@@ -48,7 +48,7 @@ TaskItem.propTypes = {
   }).isRequired,
   onDeleteTask: PropTypes.func.isRequired,
   onToggleTask: PropTypes.func.isRequired,
-  onEditTask: PropTypes.func.isRequired, // Add propTypes for the edit handler
+  onEditTask: PropTypes.func.isRequired,
 };
 
 export default TaskItem;
