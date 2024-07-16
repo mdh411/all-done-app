@@ -9,7 +9,7 @@ const Tasks = () => {
   const [tasks, setTasks] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [error, setError] = useState('');
-  const apiUrl = process.env.REACT_APP_API_URL;
+  const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
   useEffect(() => {
     axios.get(`${apiUrl}/tasks`)
@@ -36,20 +36,19 @@ const Tasks = () => {
   };
 
   const handleToggleTask = (taskId) => {
-    const updatedTasks = tasks.map(task => 
+    const updatedTasks = tasks.map(task =>
       task.id === taskId ? { ...task, checked: !task.checked } : task
     );
     setTasks(updatedTasks);
-  
+
     const updatedTask = updatedTasks.find(task => task.id === taskId);
     axios.put(`${apiUrl}/tasks/${taskId}`, { checked: updatedTask.checked })
       .catch(error => {
         console.error("There was an error updating the task!", error);
-        // Revert the change in case of error
         setTasks(tasks);
       });
   };
-  
+
   const handleDeleteTask = (taskId) => {
     setTasks(tasks.filter(task => task.id !== taskId));
 
