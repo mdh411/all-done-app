@@ -33,7 +33,7 @@ const AddTaskModal = ({ isOpen, onRequestClose, onAddTask }) => {
           value={taskName}
           onChange={(e) => setTaskName(e.target.value)}
         />
-        <button type="submit">Add Task</button>
+        <button type="submit" data-testid="modal-add-task-button">Add Task</button>
         <button type="button" onClick={onRequestClose}>Cancel</button>
       </form>
     </Modal>

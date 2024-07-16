@@ -24,8 +24,8 @@ const Tasks = () => {
   const handleAddTask = (taskName) => {
     const newTask = { id: tasks.length + 1, name: taskName, assignee: null, status: 'Pending' };
     setTasks([...tasks, newTask]);
-    
-    //persist by sending to backend
+
+    // persist by sending to backend
     axios.post(`${apiUrl}/tasks`, newTask)
       .then(response => {
         setTasks([...tasks, response.data.task]);
@@ -39,7 +39,7 @@ const Tasks = () => {
     <div className="tasks-container">
       <h1>Tasks</h1>
       {error && <div className="error">{error}</div>}
-      <button className="add-task-button" onClick={() => setIsModalOpen(true)}>Add Task</button>
+      <button className="add-task-button" onClick={() => setIsModalOpen(true)} data-testid="open-add-task-modal-button">Add Task</button>
       <AddTaskModal
         isOpen={isModalOpen}
         onRequestClose={() => setIsModalOpen(false)}
