@@ -18,7 +18,7 @@ test('renders tasks fetched from API', async () => {
 
   render(<Tasks />);
 
-  expect(await screen.findByText('Test Task 1 - Incomplete')).toBeInTheDocument();
+  expect(await screen.findByText('Test Task 1 - Pending')).toBeInTheDocument();
   expect(await screen.findByText('Test Task 2 - Completed')).toBeInTheDocument();
 });
 
