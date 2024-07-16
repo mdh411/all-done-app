@@ -5,10 +5,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app, origins="http://localhost:3000")
 
-tasks = [
-    {"id": 1, "name": "Pray Asr", "checked": False},
-    {"id": 2, "name": "Pray Maghrib", "checked": True},
-]
+tasks = []
 
 def validate_task(task):
     if 'name' not in task or not isinstance(task['name'], str) or len(task['name'].strip()) == 0:

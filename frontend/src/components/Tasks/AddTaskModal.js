@@ -43,7 +43,7 @@ const AddTaskModal = ({ isOpen, onRequestClose, onAddTask }) => {
 AddTaskModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onRequestClose: PropTypes.func.isRequired,
-  onAddTask: PropTypes.func.isRequired
+  onAddTask: PropTypes.func.isRequired,
 };
 
 export default AddTaskModal;

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import TaskTable from './TaskTable';
 import AddTaskModal from './AddTaskModal';
+import TaskItem from './TaskItem';
 import './Tasks.css';
+import allDoneLogo from '../../assets/images/all_done_logo_2.png';
 
 const Tasks = () => {
   const [tasks, setTasks] = useState([]);
@@ -22,13 +23,10 @@ const Tasks = () => {
   }, [apiUrl]);
 
   const handleAddTask = (taskName) => {
-    const newTask = { id: tasks.length + 1, name: taskName, assignee: null, status: 'Pending' };
-    setTasks([...tasks, newTask]);
-
-    // persist by sending to backend
+    const newTask = { name: taskName, checked: false };
     axios.post(`${apiUrl}/tasks`, newTask)
       .then(response => {
-        setTasks([...tasks, response.data.task]);
+        setTasks(prevTasks => [...prevTasks, response.data.task]);
       })
       .catch(error => {
         console.error("There was an error adding the task!", error);
@@ -36,16 +34,24 @@ const Tasks = () => {
   };
 
   return (
-    <div className="tasks-container">
-      <h1>Tasks</h1>
-      {error && <div className="error">{error}</div>}
-      <button className="add-task-button" onClick={() => setIsModalOpen(true)} data-testid="open-add-task-modal-button">Add Task</button>
+    <div>
+      <img src={allDoneLogo} alt="Logo" className="logo" />
+      <button className="add-task-button" onClick={() => setIsModalOpen(true)} data-testid="open-add-task-modal-button">
+        + ADD TASK
+      </button>
+      <div className="tasks-container">
+        {error && <div className="error">{error}</div>}
+        <div className="tasks-list">
+          {tasks.map(task => (
+            <TaskItem key={task.id} task={task} />
+          ))}
+        </div>
+      </div>
       <AddTaskModal
         isOpen={isModalOpen}
         onRequestClose={() => setIsModalOpen(false)}
         onAddTask={handleAddTask}
       />
-      <TaskTable tasks={tasks} />
     </div>
   );
 };
