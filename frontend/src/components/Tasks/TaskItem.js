@@ -1,16 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './TaskItem.css';
+import Checkbox from '@mui/material/Checkbox';
 import DeleteIcon from '@mui/icons-material/Delete';
+import './TaskItem.css';
 
-const TaskItem = ({ task, onDelete }) => {
+const TaskItem = ({ task, onDeleteTask, onToggleTask }) => {
+  const handleToggle = () => {
+    onToggleTask(task.id);
+  };
+
+  const handleDelete = () => {
+    onDeleteTask(task.id);
+  };
+
   return (
-    <div className="task-item">
-      <input type="checkbox" checked={task.checked} readOnly />
+    <div className={`task-item ${task.checked ? 'completed' : ''}`}>
+      <Checkbox
+        checked={task.checked}
+        onChange={handleToggle}
+        inputProps={{ 'aria-label': 'complete task checkbox', 'data-testid': `complete-checkbox-${task.id}` }}
+      />
       <span className="task-name">{task.name}</span>
       <DeleteIcon
         className="delete-button"
-        onClick={() => onDelete(task.id)}
+        onClick={handleDelete}
         data-testid={`delete-button-${task.id}`}
       />
     </div>
@@ -23,7 +36,8 @@ TaskItem.propTypes = {
     name: PropTypes.string.isRequired,
     checked: PropTypes.bool.isRequired,
   }).isRequired,
-  onDelete: PropTypes.func.isRequired,
+  onDeleteTask: PropTypes.func.isRequired,
+  onToggleTask: PropTypes.func.isRequired,
 };
 
 export default TaskItem;

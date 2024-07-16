@@ -19,6 +19,7 @@ test('renders tasks retrieved from API', async () => {
 
   render(<Tasks />);
 
+    // Ensure tasks are rendered
   expect(await screen.findByText('Test Task 1')).toBeInTheDocument();
   expect(screen.getByText('Test Task 2')).toBeInTheDocument();
 });
@@ -38,12 +39,15 @@ test('adds a task when the Add Task button is clicked and the form is submitted'
   axios.post.mockResolvedValue({ data: { task: newTask } });
 
   render(<Tasks />);
-  
+
   fireEvent.click(screen.getByTestId('open-add-task-modal-button'));
   fireEvent.change(screen.getByPlaceholderText('Enter Task'), { target: { value: 'New Task' } });
   fireEvent.click(screen.getByTestId('modal-add-task-button'));
-  
-  expect(await screen.findByText('New Task')).toBeInTheDocument();
+
+  // Ensure the modal closes and the task appears
+  await waitFor(() => {
+    expect(screen.getByText('New Task')).toBeInTheDocument();
+  });
 });
 
 test('deletes a task when the delete button is clicked', async () => {
@@ -56,13 +60,49 @@ test('deletes a task when the delete button is clicked', async () => {
 
   render(<Tasks />);
 
-  await waitFor(() => {
-    expect(screen.getByText('Test Task 1')).toBeInTheDocument();
-  });
-
+  expect(await screen.findByText('Test Task 1')).toBeInTheDocument();
   fireEvent.click(screen.getByTestId('delete-button-1'));
-
   await waitFor(() => {
     expect(screen.queryByText('Test Task 1')).not.toBeInTheDocument();
   });
+});
+
+test('toggles task completion state when the checkbox is clicked', async () => {
+  const tasks = [
+    { id: 1, name: 'Test Task 1', checked: false },
+    { id: 2, name: 'Test Task 2', checked: true }
+  ];
+  axios.get.mockResolvedValue({ data: { tasks } });
+  axios.put.mockResolvedValue({ data: { task: { ...tasks[0], checked: true } } });
+
+  render(<Tasks />);
+
+  const task1 = await screen.findByText('Test Task 1');
+  const checkbox = screen.getByTestId('complete-checkbox-1');
+
+  fireEvent.click(checkbox);
+
+  // Verify state after toggle
+  await waitFor(() => {
+    expect(axios.put).toHaveBeenCalledWith('http://localhost:5000/tasks/1', { checked: true });
+  });
+});
+
+test('handles API error when toggling task completion state', async () => {
+  const tasks = [
+    { id: 1, name: 'Test Task 1', checked: false },
+    { id: 2, name: 'Test Task 2', checked: true }
+  ];
+  axios.get.mockResolvedValue({ data: { tasks } });
+  axios.put.mockRejectedValue(new Error('There was an error updating the task!'));
+
+  render(<Tasks />);
+
+  const task1 = await screen.findByText('Test Task 1');
+  const checkbox = screen.getByTestId('complete-checkbox-1');
+
+  fireEvent.click(checkbox);
+
+  // Ensure correct API call
+  expect(axios.put).toHaveBeenCalledWith('http://localhost:5000/tasks/1', { checked: true });
 });

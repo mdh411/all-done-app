@@ -7,12 +7,23 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  transition: background-color 0.3s ease; /* Smooth transition for background color change */
 }
 
 .task-name {
   flex-grow: 1;
   text-align: left;
   margin-left: 10px;
+  transition: color 0.3s ease; /* Smooth transition for text color change */
+}
+
+.task-item.completed .task-name {
+  text-decoration: line-through;
+  color: #a0a0a0;
+}
+
+.task-item.completed {
+  background-color: #e0e0e0; /* Faded background for completed tasks */
 }
 
 .delete-button {
