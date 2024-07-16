@@ -7,14 +7,22 @@ Modal.setAppElement('#root');
 
 const AddTaskModal = ({ isOpen, onRequestClose, onAddTask }) => {
   const [taskName, setTaskName] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (taskName.trim()) {
-      onAddTask(taskName);
-      setTaskName('');
-      onRequestClose();
+    if (taskName.trim() === '') {
+      setError('Task name cannot be empty.');
+      return;
     }
+    if (taskName.length > 100) {
+      setError('Task name cannot exceed 100 characters.');
+      return;
+    }
+    onAddTask(taskName);
+    setTaskName('');
+    setError('');
+    onRequestClose();
   };
 
   return (
@@ -26,15 +34,17 @@ const AddTaskModal = ({ isOpen, onRequestClose, onAddTask }) => {
       overlayClassName="overlay"
     >
       <h2>Add Task</h2>
+      {error && <div className="error-message" data-testid="error-message">{error}</div>}
       <form onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Enter Task"
           value={taskName}
           onChange={(e) => setTaskName(e.target.value)}
+          data-testid="task-input"
         />
         <button type="submit" data-testid="modal-add-task-button">Add Task</button>
-        <button type="button" onClick={onRequestClose}>Cancel</button>
+        <button type="button" onClick={onRequestClose} data-testid="modal-cancel-button">Cancel</button>
       </form>
     </Modal>
   );
