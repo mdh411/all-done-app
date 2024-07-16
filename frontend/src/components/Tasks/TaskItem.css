@@ -1,24 +1,21 @@
 .task-item {
-    display: flex;
-    align-items: center;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    padding: 10px;
-    margin-bottom: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
-  }
-  
-  .task-item:hover {
-    transform: scale(1.02);
-  }
-  
-  .task-name {
-    margin-left: 10px;
-    font-size: 16px;
-  }
-  
-  .task-item input[type="checkbox"] {
-    transform: scale(1.2);
-  }
-  
+  background-color: #f8f9fa;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.task-name {
+  flex-grow: 1;
+  text-align: left;
+  margin-left: 10px;
+}
+
+.delete-button {
+  cursor: pointer;
+  color: red;
+}

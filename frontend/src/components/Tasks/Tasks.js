@@ -23,13 +23,22 @@ const Tasks = () => {
   }, [apiUrl]);
 
   const handleAddTask = (taskName) => {
-    const newTask = { name: taskName, checked: false };
-    axios.post(`${apiUrl}/tasks`, newTask)
+    axios.post(`${apiUrl}/tasks`, { name: taskName, checked: false })
       .then(response => {
-        setTasks(prevTasks => [...prevTasks, response.data.task]);
+        setTasks([...tasks, response.data.task]);
       })
       .catch(error => {
         console.error("There was an error adding the task!", error);
+      });
+  };
+
+  const handleDeleteTask = (taskId) => {
+    axios.delete(`${apiUrl}/tasks/${taskId}`)
+      .then(() => {
+        setTasks(tasks.filter(task => task.id !== taskId));
+      })
+      .catch(error => {
+        console.error("There was an error deleting the task!", error);
       });
   };
 
@@ -43,7 +52,7 @@ const Tasks = () => {
         {error && <div className="error">{error}</div>}
         <div className="tasks-list">
           {tasks.map(task => (
-            <TaskItem key={task.id} task={task} />
+            <TaskItem key={task.id} task={task} onDelete={handleDeleteTask} />
           ))}
         </div>
       </div>

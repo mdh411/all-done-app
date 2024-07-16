@@ -35,11 +35,6 @@ test('displays error message when API call fails', async () => {
 
 test('adds a task when the Add Task button is clicked and the form is submitted', async () => {
   const newTask = { id: 3, name: 'New Task', checked: false };
-  const tasks = [
-    { id: 1, name: 'Test Task 1', checked: false },
-    { id: 2, name: 'Test Task 2', checked: true }
-  ];
-  axios.get.mockResolvedValue({ data: { tasks } });
   axios.post.mockResolvedValue({ data: { task: newTask } });
 
   render(<Tasks />);
@@ -47,6 +42,27 @@ test('adds a task when the Add Task button is clicked and the form is submitted'
   fireEvent.click(screen.getByTestId('open-add-task-modal-button'));
   fireEvent.change(screen.getByPlaceholderText('Enter Task'), { target: { value: 'New Task' } });
   fireEvent.click(screen.getByTestId('modal-add-task-button'));
-
+  
   expect(await screen.findByText('New Task')).toBeInTheDocument();
+});
+
+test('deletes a task when the delete button is clicked', async () => {
+  const tasks = [
+    { id: 1, name: 'Test Task 1', checked: false },
+    { id: 2, name: 'Test Task 2', checked: true }
+  ];
+  axios.get.mockResolvedValue({ data: { tasks } });
+  axios.delete.mockResolvedValue({});
+
+  render(<Tasks />);
+
+  await waitFor(() => {
+    expect(screen.getByText('Test Task 1')).toBeInTheDocument();
+  });
+
+  fireEvent.click(screen.getByTestId('delete-button-1'));
+
+  await waitFor(() => {
+    expect(screen.queryByText('Test Task 1')).not.toBeInTheDocument();
+  });
 });
