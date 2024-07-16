@@ -23,12 +23,10 @@ const Tasks = () => {
   }, [apiUrl]);
 
   const handleAddTask = (taskName) => {
-    const newTask = { id: tasks.length + 1, name: taskName, checked: false };
-    setTasks([...tasks, newTask]);
-
+    const newTask = { name: taskName, checked: false };
     axios.post(`${apiUrl}/tasks`, newTask)
       .then(response => {
-        setTasks([...tasks, response.data.task]);
+        setTasks(prevTasks => [...prevTasks, response.data.task]);
       })
       .catch(error => {
         console.error("There was an error adding the task!", error);

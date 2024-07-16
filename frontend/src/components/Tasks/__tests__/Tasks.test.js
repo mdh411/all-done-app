@@ -35,6 +35,11 @@ test('displays error message when API call fails', async () => {
 
 test('adds a task when the Add Task button is clicked and the form is submitted', async () => {
   const newTask = { id: 3, name: 'New Task', checked: false };
+  const tasks = [
+    { id: 1, name: 'Test Task 1', checked: false },
+    { id: 2, name: 'Test Task 2', checked: true }
+  ];
+  axios.get.mockResolvedValue({ data: { tasks } });
   axios.post.mockResolvedValue({ data: { task: newTask } });
 
   render(<Tasks />);
@@ -42,6 +47,6 @@ test('adds a task when the Add Task button is clicked and the form is submitted'
   fireEvent.click(screen.getByTestId('open-add-task-modal-button'));
   fireEvent.change(screen.getByPlaceholderText('Enter Task'), { target: { value: 'New Task' } });
   fireEvent.click(screen.getByTestId('modal-add-task-button'));
-  
+
   expect(await screen.findByText('New Task')).toBeInTheDocument();
 });

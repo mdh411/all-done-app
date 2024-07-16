@@ -11,8 +11,8 @@ beforeAll(() => {
 
 test('renders tasks retrieved from API', async () => {
   const tasks = [
-    { id: 1, name: 'Test Task 1', assignee: 'Unassigned', status: 'Pending' },
-    { id: 2, name: 'Test Task 2', assignee: 'John Doe', status: 'Completed' }
+    { id: 1, name: 'Test Task 1', checked: false },
+    { id: 2, name: 'Test Task 2', checked: true }
   ];
   axios.get.mockResolvedValue({ data: { tasks } });
 
@@ -20,8 +20,6 @@ test('renders tasks retrieved from API', async () => {
 
   expect(await screen.findByText('Test Task 1')).toBeInTheDocument();
   expect(screen.getByText('Test Task 2')).toBeInTheDocument();
-  expect(screen.getByText('Pending')).toBeInTheDocument();
-  expect(screen.getByText('Completed')).toBeInTheDocument();
 });
 
 test('displays error message when API call fails', async () => {
