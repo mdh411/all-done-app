@@ -1,3 +1,10 @@
+from flask_jwt_extended import JWTManager
+
+jwt = JWTManager()
+
+def init_jwt(app):
+    jwt.init_app(app)
+
 def validate_task(task):
     if 'name' not in task or not isinstance(task['name'], str) or len(task['name'].strip()) == 0:
         return False
