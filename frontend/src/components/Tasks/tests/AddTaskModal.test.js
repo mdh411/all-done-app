@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import axios from 'axios';
+import { BrowserRouter } from 'react-router-dom';
 import Tasks from '../Tasks';
 import AddTaskModal from '../AddTaskModal';
 
@@ -10,6 +11,11 @@ jest.mock('axios');
 beforeAll(() => {
   process.env.REACT_APP_API_URL = 'http://localhost:5000';
 });
+
+const renderWithRouter = (ui, { route = '/' } = {}) => {
+  window.history.pushState({}, 'Test page', route);
+  return render(ui, { wrapper: BrowserRouter });
+};
 
 const renderAddTaskModal = (props) => {
   render(<AddTaskModal {...props} />);
@@ -20,7 +26,7 @@ const changeTaskNameAndSubmit = (taskName) => {
   fireEvent.click(screen.getByTestId('modal-add-task-button'));
 };
 
-// parameterized tests for invalid task names
+// Parameterized tests for invalid task names
 test.each([
   ['', 'Task name cannot be empty.'],
   ['   ', 'Task name cannot be empty.'],
@@ -38,7 +44,7 @@ test.each([
   });
 });
 
-// test for exactly 100 chars
+// Test for exactly 100 characters
 test('accepts a task name with exactly 100 characters', async () => {
   const onAddTask = jest.fn();
   const onRequestClose = jest.fn();
@@ -60,7 +66,7 @@ test('adds a task when the Add Task button is clicked and the form is submitted'
   axios.get.mockResolvedValue({ data: { tasks: [] } });
   axios.post.mockResolvedValue({ data: { task: newTask } });
 
-  render(<Tasks />);
+  renderWithRouter(<Tasks />);
 
   fireEvent.click(screen.getByTestId('open-add-task-modal-button'));
   fireEvent.change(screen.getByPlaceholderText('Enter Task'), { target: { value: 'New Task' } });

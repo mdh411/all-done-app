@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import axios from 'axios';
+import { BrowserRouter } from 'react-router-dom';
 import Tasks from '../Tasks';
 
 jest.mock('axios');
@@ -15,10 +16,15 @@ const tasks = [
   { id: 2, name: 'Test Task 2', checked: true }
 ];
 
-// helper functions for reusability
+// Helper functions for reusability
+const renderWithRouter = (ui, { route = '/' } = {}) => {
+  window.history.pushState({}, 'Test page', route);
+  return render(ui, { wrapper: BrowserRouter });
+};
+
 const renderTasksComponent = async () => {
   axios.get.mockResolvedValue({ data: { tasks } });
-  render(<Tasks />);
+  renderWithRouter(<Tasks />);
   await screen.findByText('Test Task 1');
 };
 
@@ -48,41 +54,36 @@ test('edits a task when the Edit Task button is clicked and the form is submitte
   });
 });
 
-// paramaterised test to avoid repetiton
+// Parameterized test to avoid repetition
 test.each([
-    ['', 'Task name cannot be empty.'],
-    ['   ', 'Task name cannot be empty.'],
-    ['a'.repeat(101), 'Task name cannot exceed 100 characters.']
-  ])('shows error when the task name is "%s"', async (taskName, expectedError) => {
-    await renderTasksComponent();
-  
-    openEditModalAndSubmit(taskName);
-  
-    await waitFor(() => {
-      expect(screen.getByTestId('error-message')).toHaveTextContent(expectedError);
-    });
+  ['', 'Task name cannot be empty.'],
+  ['   ', 'Task name cannot be empty.'],
+  ['a'.repeat(101), 'Task name cannot exceed 100 characters.']
+])('shows error when the task name is "%s"', async (taskName, expectedError) => {
+  await renderTasksComponent();
+
+  openEditModalAndSubmit(taskName);
+
+  await waitFor(() => {
+    expect(screen.getByTestId('error-message')).toHaveTextContent(expectedError);
   });
+});
 
 test('accepts a task name with exactly 100 characters', async () => {
-    const tasks = [
-      { id: 1, name: 'Test Task 1', checked: false },
-      { id: 2, name: 'Test Task 2', checked: true }
-    ];
-  
-    axios.get.mockResolvedValue({ data: { tasks } });
-    axios.put.mockResolvedValue({ data: { task: { ...tasks[0], name: 'a'.repeat(100) } } });
-  
-    render(<Tasks />);
-  
-    expect(await screen.findByText('Test Task 1')).toBeInTheDocument();
-    fireEvent.click(screen.getByTestId('edit-button-1'));
-    fireEvent.change(screen.getByPlaceholderText('Enter Updated Task'), { target: { value: 'a'.repeat(100) } });
-    fireEvent.click(screen.getByTestId('modal-edit-task-button'));
-  
-    await waitFor(() => {
-      expect(screen.getByText('a'.repeat(100))).toBeInTheDocument();
-    });
+  axios.get.mockResolvedValue({ data: { tasks } });
+  axios.put.mockResolvedValue({ data: { task: { ...tasks[0], name: 'a'.repeat(100) } } });
+
+  renderWithRouter(<Tasks />);
+
+  expect(await screen.findByText('Test Task 1')).toBeInTheDocument();
+  fireEvent.click(screen.getByTestId('edit-button-1'));
+  fireEvent.change(screen.getByPlaceholderText('Enter Updated Task'), { target: { value: 'a'.repeat(100) } });
+  fireEvent.click(screen.getByTestId('modal-edit-task-button'));
+
+  await waitFor(() => {
+    expect(screen.getByText('a'.repeat(100))).toBeInTheDocument();
   });
+});
 
 test('cancels the edit task action', async () => {
   await renderTasksComponent();

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 import PropTypes from 'prop-types';
-import './AddTaskModal.css';
+import './TaskModal.css';
 
 Modal.setAppElement('#root');
 
@@ -43,8 +43,10 @@ const AddTaskModal = ({ isOpen, onRequestClose, onAddTask }) => {
           onChange={(e) => setTaskName(e.target.value)}
           data-testid="task-input"
         />
-        <button type="submit" data-testid="modal-add-task-button">Add Task</button>
-        <button type="button" onClick={onRequestClose} data-testid="modal-cancel-button">Cancel</button>
+        <div className="modal-buttons">
+          <button type="submit" data-testid="modal-add-task-button">Add Task</button>
+          <button type="button" onClick={onRequestClose} className="cancel-button" data-testid="modal-cancel-button">Cancel</button>
+        </div>
       </form>
     </Modal>
   );

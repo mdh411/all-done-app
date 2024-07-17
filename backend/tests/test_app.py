@@ -1,11 +1,12 @@
 import json
 import pytest
-from app import app, tasks
+from app import create_app
 
 @pytest.fixture
 def client():
-    app.config['TESTING'] = True
-    with app.test_client() as client:
+    flask_app = create_app()
+    flask_app.config['TESTING'] = True
+    with flask_app.test_client() as client:
         yield client
 
 def test_home_route(client):
@@ -65,4 +66,4 @@ def test_create_task_invalid_input(client):
     assert response.status_code == 400
     response_data = json.loads(response.data.decode('utf-8'))
     assert 'message' in response_data
-    assert response
+    assert response_data['message'] == "Invalid task data. 'name' field is required and must be a non-empty string."

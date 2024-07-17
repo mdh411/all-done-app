@@ -11,6 +11,7 @@ pytest = "^8.2.0"
 coverage = "^7.5.0"
 flake8 = "^7.1.0"
 flask_cors = "^3.0.10"
+flask-jwt-extended = "^4.6.0"
 
 [tool.poetry.dev-dependencies]
 
