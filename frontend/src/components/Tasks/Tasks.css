@@ -2,20 +2,9 @@ body {
   background: linear-gradient(135deg, #e0f7fa, #e1f5fe);
 }
 
-.tasks-container {
-  max-width: 600px;
-  margin: 20px auto;
+.tasks-page {
+  text-align: center;
   padding: 20px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
 }
 
 .logo {
@@ -24,10 +13,30 @@ body {
   display: block;
 }
 
+.logout-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  background-color: #f8f9fa;
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+}
+
+.logout-button:hover {
+  background-color: #007bff;
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+}
+
 .add-task-button-container {
   display: flex;
-  justify-content: flex-start;
-  margin-top: 10px;
+  justify-content: center; /* Center align the button horizontally */
+  margin-bottom: 20px;
 }
 
 .add-task-button {
@@ -43,6 +52,15 @@ body {
 
 .add-task-button:hover {
   background-color: #0056b3;
+}
+
+.tasks-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .tasks-list {
@@ -61,4 +79,9 @@ body {
 
 .task-item input[type="checkbox"] {
   margin-right: 10px;
+}
+
+.error {
+  color: red;
+  margin-bottom: 20px;
 }

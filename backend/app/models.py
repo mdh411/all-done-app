@@ -1,5 +1,5 @@
 users = [
-    {"id": 1, "email": "mohammed@ada.com", "password": "adaIsGreat123"}  # Passwords should be hashed in a real app
+    {"id": 1, "email": "abc@1", "password": "123"}  # Passwords should be hashed in a real app
 ]
 
 def find_user_by_email(email):

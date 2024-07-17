@@ -5,8 +5,11 @@ import EditTaskModal from './EditTaskModal';
 import TaskItem from './TaskItem';
 import './Tasks.css';
 import allDoneLogo from '../../assets/images/all_done_logo_2.png';
+import { useNavigate } from 'react-router-dom';
 
 const Tasks = () => {
+  const navigate = useNavigate();
+
   const [tasks, setTasks] = useState([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -14,7 +17,6 @@ const Tasks = () => {
   const [taskToEdit, setTaskToEdit] = useState(null);
   const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
-  // Fetch tsks from api on component mount
   useEffect(() => {
     axios.get(`${apiUrl}/tasks`)
       .then(response => {
@@ -26,7 +28,6 @@ const Tasks = () => {
       });
   }, [apiUrl]);
 
-  // Handle adding a new task
   const handleAddTask = (taskName) => {
     const newTask = { id: tasks.length + 1, name: taskName, checked: false };
     setTasks([...tasks, newTask]);
@@ -40,7 +41,6 @@ const Tasks = () => {
       });
   };
 
-  // Handle editing an existing task
   const handleEditTask = (taskId, taskName) => {
     const updatedTasks = tasks.map(task =>
       task.id === taskId ? { ...task, name: taskName } : task
@@ -50,11 +50,10 @@ const Tasks = () => {
     axios.put(`${apiUrl}/tasks/${taskId}`, { name: taskName })
       .catch(error => {
         console.error("There was an error updating the task!", error);
-        setTasks(tasks); // Revert back to original tasks on error
+        setTasks(tasks);
       });
   };
 
-  // Handle toggling the completion state of a task
   const handleToggleTask = (taskId) => {
     const updatedTasks = tasks.map(task =>
       task.id === taskId ? { ...task, checked: !task.checked } : task
@@ -69,7 +68,6 @@ const Tasks = () => {
       });
   };
 
-  // handle deleting a task
   const handleDeleteTask = (taskId) => {
     setTasks(tasks.filter(task => task.id !== taskId));
 
@@ -79,19 +77,26 @@ const Tasks = () => {
       });
   };
 
-  // Open the edit task modal and set the task to be edited
   const handleEditTaskOpen = (taskId) => {
     const task = tasks.find(task => task.id === taskId);
     setTaskToEdit(task);
     setIsEditModalOpen(true);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+
   return (
-    <div>
+    <div className="tasks-page">
+      <button onClick={handleLogout} className="logout-button">Logout</button>
       <img src={allDoneLogo} alt="Logo" className="logo" />
-      <button className="add-task-button" onClick={() => setIsAddModalOpen(true)} data-testid="open-add-task-modal-button">
-        + ADD TASK
-      </button>
+      <div className="add-task-button-container">
+        <button className="add-task-button" onClick={() => setIsAddModalOpen(true)} data-testid="open-add-task-modal-button">
+          Add Task
+        </button>
+      </div>
       <div className="tasks-container">
         {error && <div className="error">{error}</div>}
         <div className="tasks-list">
@@ -101,7 +106,7 @@ const Tasks = () => {
               task={task}
               onDeleteTask={handleDeleteTask}
               onToggleTask={handleToggleTask}
-              onEditTask={handleEditTaskOpen} // Pass the edit handler to TaskItem
+              onEditTask={handleEditTaskOpen}
             />
           ))}
         </div>
