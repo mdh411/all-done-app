@@ -114,7 +114,7 @@ To setup the frontend:
 * Stylelint using ```npm run lint:styles```
 
 ### How to Run Tests
-* Test backend using ```poetry run pytest```
+* Test backend using ```poetry run coverage run -m pytest```
 * Test frontend using ```npm test```
 
 ### App Features
@@ -143,6 +143,44 @@ I adopted a somewhat unconventional agile approach as I was working independentl
 Prior to implementation, I researched the tools and libraries best suited for my project needs. Next, I did a sprint plan using my Kanban board to prioritise tickets. I conducted daily self-reviews to evaluate positives and areas of improvement in my approach and implementation. These kept me focused, accountable, and acted as both standups and retrospectives. I documented any insights (using Google Docs) to mould future work.
 
 ## Test Methodologies and Tools
+I applied a range of testing methodologies and tooling throughout the development phase. These were incorporated in an agile manner as I maintained continuous testing to allow early bug and error detection. In the planning phase, I drafted a plan detailing the test cases I would write based on the ticket requirements.
 
-### Backend Test Cases
+### Types of Testing
 
+#### Unit Testing
+Unit tests were primarily focused on individual components and functions to ensure they work as expected in isolation; it is assumed that they have not impacted anything else. They are the highest in number because each function and pathway needed testing. I wrote them using the pytest framework for the backend and React Testing Library with Jest for the frontend. Unit tests cover both the logic of the application and the user interface elements. Jest has a ```test.each``` method which allowed me to test functionality given a range of inputs (valid and invalid) using paramaterised testing. Moreover, I leveraged Jest's built-in support for mocking to mock api calls using ```jest.mock('axios')``` to isolate and test components without making actual network requests. It also supports parallel testing, which sped up the testing process. This will prove more noticeably beneficial as the test suites grow.
+
+I maintained a standard that a pull request cannot be merged unless adequately unit tested. I was aiming for a minimum coverage threshold of 80% and ended up exceeding this with a total coverage of 95% for the backend. My frontend coverage was >92% in all files. I established this threshold to balance between extensive coverage and feasibility as there were other other higher value tasks that needed doing, such as further feature development.
+
+![Frontend Test Coverage](images/frontend_coverage.png)
+
+![Backend Test Coverage](images/backend_coverage.png)
+
+#### Functional Testing
+Functional tests were designed to verify that the application behaves as expected from the end user's perspective. These tests simulate real user scenarios and check if the application meets the specified requirements. In my project I performed functional tests to validate the login and authentication features.
+
+#### Integration Testing
+Integration testing was crucial in helping me ensure the different modules or components of the application worked together as intended. It helped identify issues that occurred when combining individual units, ensuring that the overall system functions correctly. This type of testing is essential for detecting interface defects, interaction issues, and data flow problems between modules.
+
+I performed some integration tests in the frontend, which checked the interaction between the frontend task management components and the backend API, ensuring tasks are correctly fetched, added, updated, and deleted. Using ```@testing-library/react``` encouraged writing tests that interact with the UI the same way a user would, making tests more meaningful and easier to understand.
+
+For example: Using methods like ```screen.getByText``` and ```fireEvent.click``` to simulate user interactions and verify component behavior.
+
+It also means that components are rendered in a real browser environment, which ensures that integration tests accurately reflect how the components will behave in production.
+
+#### Manual Sanity / Smoke Testing
+After coding each pull request, I would take a short break and return to review my code with fresh eyes (to simulate a peer review from a team member). If passed, I would manually sanity test the new feature or fix to ensure there are no blatant bugs. Often the eye can catch bugs that may be difficult to conceptualise just from code.
+
+Before merging, I would manually smoke test the main functionalities of the app to ensure they were still working as intended. The image below depicts the scenarios that were checked against a set of expected outcomes. Although tedious, these are very necessary. Given the size of the application, I decided it was not worth investing time to automate these tests.
+
+**Manual Smoke Tests**
+
+![Manual Smoke Tests](images/manual_smoke_tests.png)
+
+**Backend Test Case Scenarios**
+
+![Backend Test Cases](images/backend_test_cases.png)
+
+**Frontend Test Case Scenarios**
+
+![Frontend Test Cases](images/frontend_test_cases.png)
