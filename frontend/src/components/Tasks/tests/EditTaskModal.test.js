@@ -92,6 +92,7 @@ test('cancels the edit task action', async () => {
 
   await waitFor(() => {
     expect(screen.queryByText('Updated Task')).not.toBeInTheDocument();
-    expect(screen.getByText('Test Task 1')).toBeInTheDocument();
   });
+
+  expect(screen.getByText('Test Task 1')).toBeInTheDocument();
 });

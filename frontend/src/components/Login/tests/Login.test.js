@@ -23,8 +23,9 @@ test('login with invalid credentials', async () => {
 
   await waitFor(() => {
     expect(screen.getByTestId('error-message')).toBeInTheDocument();
-    expect(screen.getByTestId('error-message')).toHaveTextContent('Invalid email or password');
   });
+  
+  expect(screen.getByTestId('error-message')).toHaveTextContent('Invalid email or password');
 });
 
 test('login with valid credentials', async () => {
