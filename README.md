@@ -184,3 +184,75 @@ Before merging, I would manually smoke test the main functionalities of the app 
 **Frontend Test Case Scenarios**
 
 ![Frontend Test Cases](images/frontend_test_cases.png)
+
+## Automated CI Pipeline
+Using GitHub Actions allowed me to automate workflows directly from my repository. I configured two pipelines (one for the frontend and one for the backend) that ran whenever code was pushed or a pull request was made to the respective directory. This prevented unnecessary pipeline runs and conservation of resources. By automating these pipelines, I was forced to address breakages instantly because merge would be prevented otherwise.
+
+### Backend CI Pipeline
+![backend yaml](images/backend_yaml.png)
+![Backend CI Pipeline](images/build-be.png)
+
+This shows a passing backend build with all tests passing and 95% test coverage. The "Lint code" step returns clear as I have maintained a high coding standard.
+
+### Frontend CI Pipeline
+![Frontend yaml](images/frontend_yml.png)
+![Frontend CI Pipeline](images/build-fe.png)
+
+The frontend pipeline contains many steps including (but not exclusive to): install dependencies, lint styles, lint source code, run tests, and run coverage. For a full view, please refer to the 'Actions' tab within the GitHub repository
+
+Note: The 'console.error' statements within the 'Run Tests' step are part of the intended test output. This is clear because it shows all tests are passing.
+
+## Coding Best Practices
+Coding best practices are essential for ensuring that software is reliable, maintainable, and scalable. These practices help developers write clean, efficient, and bug-free code, making it easier to collaborate, review, and extend the codebase. Adhering to best practices also improves the readability of the code, reduces technical debt, and enhances the overall quality of the product.
+
+### Consistent Naming Conventions
+Consistent naming conventions were used for variables, functions, classes, and files. For instance, functions and variables use camelCase, while classes use PascalCase. I also gave descriptive names to improve readability and make it easy for someone to understand the purpose of a function for example. For my test names, I have made it clear which function is being tested, as well as the scenario under test. For example: 'test_create_task_invalid_input'
+
+### Modular Structure
+I divided my code into small, manageable, reusable modules. Different functionalities are separated into different files and modules, adhering to the single responsibility principle. This improves readability and makes the code easier to test and maintain. I also refactored my code to create helper functions to further increase reusability. For example, in 'Tasks.test.js', the 'renderWithRouter' is reused in 3 unique tests.
+
+### Linting
+I used linters for the backend, frontend, and styling. These were used to enforce coding standards and style guidelines, ensuring consistent code quality across the codebase. Flake8 kept my python code in line with the Pep8 style guide. I extended my stylelint config using 'stylelint-config-standard'. It even ensured proper formatting, as I ended up with dozens of errors from my linters regarding whitespace, and only 1 line break instead of 2. Overall, these resulted in more consistency, caught syntax errors, and improved readability.
+
+## Coding Standards: SQA Standard IEEE 730
+This standard is part of the IEEE's set of standards for software engineering and is designed to help organizations establish a systematic approach to ensuring software quality throughout the development lifecycle. This standard outlines essential elements such as purpose, scope, management roles, documentation, standards, reviews, testing, and risk management. The benefits of adhering to IEEE 730 include ensuring consistent and high-quality software development processes, enhancing product reliability, promoting industry-standard practices, managing risks effectively, ensuring regulatory compliance, and fostering transparency and accountability within development teams.
+
+### Why was IEEE 730 Chosen
+* IEEE 730 is widely recognized and respected within the software engineering community, providing a reputable framework for SQA. This also streamlines regulatory compliance.
+* The standard covers a wide range of quality assurance activities (as mentioned above), ensuring that all critical aspects of software quality are addressed comprehensively within my application.
+* By following IEEE 730 within my project, I could effectively identify, assess, and mitigate risks, leading to a more reliable end product.
+
+### How was it applied to my Project
+I kept this standard as a guideline from beginning to end during the project lifecycle. Primarily:
+* By scoping out a clear SQA plan with clear objectives like coverage thresholds and test scenario tables.
+* This README file serves as clear and detailed **documentation** of the project SQA processes, objectives, and results.
+* I conducted **code reviews** before every merge into the main codebase and did regular audits of accessibility and performance using Google Lighthouse.
+* My **test files** contain and apply various levels of testing, including unit tests, integration tests, and functional tests, to verify the correctness and quality of the application.
+
+## Performace and Accessibility Audit
+
+### Tools Used: Google Lighthouse
+The performance and accessibility of the application were evaluated using Google Lighthouse. Lighthouse is an open-source, automated tool for improving the quality of web pages. It provides audits for performance, accessibility, progressive web apps, SEO, and more. Below are the key results of the audits, along with a critical analysis.
+
+I tested both the login area and the main tasks page.
+
+### Snapshots and Critical Analysis
+
+**Login Page Audit with Lower Score:**
+![Login Page Audit Old](images/login_old_audit.png)
+
+**Login Page Audit with Improved Score:**
+![Login Page Audit](images/login_page_audit.png)
+
+**Tasks Page Audit:**
+![Tasks Page Audit](images/task_page_audit.png)
+
+**Performace Analysis:**
+Google Lighthouse provides a comprehensive audit for performance, including metrics like First Contentful Paint (FCP), Time to Interactive (TTI), and Speed Index. The performance score of 93 indicates that the application performs well, but there are areas for improvement. Improving FCP and TTI can enhance the user experience by making the page load faster and become interactive sooner. Lighthouse offers detailed suggestions for improvement in each audit. 
+
+Optimization techniques such as lazy loading, code splitting, and minimizing JavaScript can be employed to further enhance performance.
+
+**Accessibility Analysis:**
+This audit proved very useful because I was able to take my accessibility score for the login page up to 100% from my inital assessment of 91%.  Initially, the login button had insufficient contrast, making it hard for users with visual impairments to read. After adjustments, the contrast was improved to meet accessibility standards. 
+
+These audits should be carried out regularly and placed within the SQA plan, otherwise the product will continually change shape and it can be easy to lose sight of such intricacies.
