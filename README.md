@@ -186,7 +186,9 @@ Before merging, I would manually smoke test the main functionalities of the app 
 ![Frontend Test Cases](images/frontend_test_cases.png)
 
 ## Automated CI Pipeline
-Using GitHub Actions allowed me to automate workflows directly from my repository. I configured two pipelines (one for the frontend and one for the backend) that ran whenever code was pushed or a pull request was made to the respective directory. This prevented unnecessary pipeline runs and conservation of resources. By automating these pipelines, I was forced to address breakages instantly because merge would be prevented otherwise.
+Using GitHub Actions allowed me to automate workflows directly from my repository. I configured two pipelines (one for the frontend and one for the backend) that ran whenever code was pushed or a pull request was made to the respective directory. This prevented unnecessary pipeline runs and conservation of resources. By automating these pipelines, I was forced to address failures instantly because merge would be prevented otherwise. This meant only high quality code would reach the main codebase.
+
+The process of merging into a 'main branch' is referred to as trunk-based development. I implemented this in GitHub by frequently merging small, incremental changes directly into the main branch. This approach minimized the need for long-lived feature branches, reducing merge conflicts and ensuring a stable codebase. 
 
 ### Backend CI Pipeline
 ![backend yaml](images/backend_yaml.png)
@@ -198,9 +200,29 @@ This shows a passing backend build with all tests passing and 95% test coverage.
 ![Frontend yaml](images/frontend_yml.png)
 ![Frontend CI Pipeline](images/build-fe.png)
 
-The frontend pipeline contains many steps including (but not exclusive to): install dependencies, lint styles, lint source code, run tests, and run coverage. For a full view, please refer to the 'Actions' tab within the GitHub repository
+The frontend pipeline contains many steps including (but not exclusive to): install dependencies, lint styles, lint source code, run tests, and run coverage. For a full view, please refer to the 'Actions' tab within the GitHub repository.
 
-Note: The 'console.error' statements within the 'Run Tests' step are part of the intended test output. This is clear because it shows all tests are passing.
+*Note: The 'console.error' statements within the 'Run Tests' step are part of the intended test output. This is clear because it shows all tests are passing.*
+
+### Pull Request Strategy
+In order to work on a ticket, I, as a developer had to:
+1. Create a branch with a name that links to the corresponding Trello ticket (aids project management and tracking). For example: 'ada-10-add-task-feature'.
+2. Push regular commits - usually after each significant change or when something is working correctly. This can provide a reference to roll back to if needed.
+3. Submit a Pull Request when the branch is ready for review. I created a 'pull_request_template.md' file to maintain a consistent level of detail in the pull request. This helps future developers understand the changes that took place and how to test them.
+4. Await all workflows to pass in CICD pipeline. When all show green ticks, request a review. I did self-review of each ticket. Furthermore, branches must be up-to-date before merging. I did this by pulling in the latest changes from main. However, if I had worked on a file that has also been changed in main, it can cause 'merge conflicts'. Thus, I would need to open each file and evaluate which changes I wanted to keep.
+5. Finally, merge the ticket to the main branch.
+
+Note: GitHub has a rulesetting feature, which I could have leveraged in a larger team to ensure strict reviewing. It would not allow merging unless all checks pass and atleast one reviewer approves it.
+
+![Merge blocked review](images/merge_blocked_review.png)
+
+**All checks passed example:**
+![All checks passed](images/all_checks_passed.png)
+
+**Failing job example:**
+![Failing Job](images/failing_job.png)
+
+The red cross and exit code indicate the job has failed. In this case, developers can view the run logs and ascertain where and why it failed.
 
 ## Coding Best Practices
 Coding best practices are essential for ensuring that software is reliable, maintainable, and scalable. These practices help developers write clean, efficient, and bug-free code, making it easier to collaborate, review, and extend the codebase. Adhering to best practices also improves the readability of the code, reduces technical debt, and enhances the overall quality of the product.
