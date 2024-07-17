@@ -4,10 +4,15 @@ from .routes import main_routes
 from .auth import auth_routes
 from .error_handlers import bad_request, not_found, handle_exception
 from .utils import init_jwt
+from config import Config  # Import the Config class
 
 def create_app():
     app = Flask(__name__)
-    app.config['JWT_SECRET_KEY'] = 'super-secret'  # this would be changed in prod
+    
+    # Load the configuration from config.py
+    app.config.from_object(Config)
+    
+    # CORS setup with credentials support
     CORS(app, origins="http://localhost:3000", supports_credentials=True)
     init_jwt(app)
     
