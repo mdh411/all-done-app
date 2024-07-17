@@ -56,8 +56,9 @@ test('accepts a task name with exactly 100 characters', async () => {
 
   await waitFor(() => {
     expect(screen.queryByTestId('error-message')).not.toBeInTheDocument();
-    expect(onAddTask).toHaveBeenCalledWith(taskName);
   });
+  
+  expect(onAddTask).toHaveBeenCalledWith(taskName);
 });
 
 test('adds a task when the Add Task button is clicked and the form is submitted', async () => {
