@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Tasks from './components/Tasks/Tasks';
-import Login from './components/Login';
-import PrivateRoute from './components/PrivateRoute';
+import Login from './components/Login/Login';
+import PrivateRoute from './components/Login/PrivateRoute';
 
 const App = () => {
   return (

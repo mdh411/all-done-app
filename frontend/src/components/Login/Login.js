@@ -6,14 +6,14 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const history = useNavigate();
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://127.0.0.1:5000/auth/login', { email, password }, { withCredentials: true });
+      const response = await axios.post('http://localhost:5000/auth/login', { email, password });
       localStorage.setItem('token', response.data.access_token);
-      history('/tasks');
+      navigate('/tasks');
     } catch (err) {
       setError('Invalid email or password');
     }
@@ -22,27 +22,31 @@ const Login = () => {
   return (
     <div>
       <h2>Login</h2>
-      {error && <div style={{ color: 'red' }}>{error}</div>}
+      {error && <div style={{ color: 'red' }} data-testid="error-message">{error}</div>}
       <form onSubmit={handleLogin}>
         <div>
-          <label>Email:</label>
+          <label htmlFor="email">Email:</label>
           <input
             type="email"
+            id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            data-testid="email-input"
           />
         </div>
         <div>
-          <label>Password:</label>
+          <label htmlFor="password">Password:</label>
           <input
             type="password"
+            id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            data-testid="password-input"
           />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit" data-testid="login-button">Login</button>
       </form>
     </div>
   );
